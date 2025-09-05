@@ -8,6 +8,6 @@ services:
     volumes:
       - mongo_data:/data/db
     environment:
-      MONGO_INITDB_DATABASE: todos
+      MONGO_INITDB_DATABASE: todo-service
 volumes:
   mongo_data:
