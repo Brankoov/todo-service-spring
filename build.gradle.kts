@@ -25,30 +25,32 @@ repositories {
 }
 
 dependencies {
-	dependencies {
-		implementation("org.springframework.boot:spring-boot-starter-web")
-		implementation("org.springframework.boot:spring-boot-starter-data-mongodb") // <— byter till icke-reaktiv
-		implementation("org.springframework.boot:spring-boot-starter-validation")
-		implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-mongodb") // <— byter till icke-reaktiv
+	implementation("org.springframework.boot:spring-boot-starter-validation")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
-		developmentOnly("org.springframework.boot:spring-boot-devtools")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 
-		compileOnly("org.projectlombok:lombok")
-		annotationProcessor("org.projectlombok:lombok")
+	compileOnly("org.projectlombok:lombok")
+	annotationProcessor("org.projectlombok:lombok")
 
-		testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
 
-		// Tar bort reaktivt test för tillfället
-		// testImplementation("io.projectreactor:reactor-test")
+	// Tar bort reaktivt test för tillfället
+	// testImplementation("io.projectreactor:reactor-test")
 
-		// Låt bli Security tills vidare (annars skyddas allt med Basic Auth)
-		// implementation("org.springframework.boot:spring-boot-starter-security")
-		// testImplementation("org.springframework.security:spring-security-test")
+	// Låt bli Security tills vidare (annars skyddas allt med Basic Auth)
+	// implementation("org.springframework.boot:spring-boot-starter-security")
+	// testImplementation("org.springframework.security:spring-security-test")
 
-		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+	testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
 	}
-}
+
+
 
 tasks.withType<Test> {
 	useJUnitPlatform()
