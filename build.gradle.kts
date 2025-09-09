@@ -43,8 +43,8 @@ dependencies {
 		// testImplementation("io.projectreactor:reactor-test")
 
 		// Låt bli Security tills vidare (annars skyddas allt med Basic Auth)
-		// implementation("org.springframework.boot:spring-boot-starter-security")
-		// testImplementation("org.springframework.security:spring-security-test")
+		implementation("org.springframework.boot:spring-boot-starter-security")
+		testImplementation("org.springframework.security:spring-security-test")
 
 		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 	}
