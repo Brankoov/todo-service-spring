@@ -9,7 +9,6 @@ import java.util.List;
 @RequestMapping("/todos")
 public class TodoController {
 
-
     private final TodoService service;
 
     public TodoController(TodoService service) {
@@ -27,15 +26,13 @@ public class TodoController {
     }
 
     @PutMapping("/{id}")
-    public Todo updateTodo(@PathVariable Long id, @RequestBody Todo todo) {
+    public Todo updateTodo(@PathVariable String id, @RequestBody Todo todo) {
         return service.update(id, todo);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteTodo(@PathVariable String id) {
         service.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
-
-

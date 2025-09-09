@@ -21,7 +21,7 @@ public class TodoService {
         return repository.save(todo);
     }
 
-    public Todo update(Long id, Todo newTodo) {
+    public Todo update(String id, Todo newTodo) {
         return repository.findById(id)
                 .map(todo -> {
                     todo.setTitle(newTodo.getTitle());
@@ -31,8 +31,7 @@ public class TodoService {
                 }).orElseThrow(() -> new RuntimeException("Task not found"));
     }
 
-    public void delete(Long id) {
+    public void delete(String id) {
         repository.deleteById(id);
     }
-
 }
