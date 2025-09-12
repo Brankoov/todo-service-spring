@@ -46,4 +46,8 @@ public class TodoService {
         }
         repository.deleteById(id);
     }
+    public Todo getByTitle(String title) {
+        return repository.findByTitle(title)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+    }
 }

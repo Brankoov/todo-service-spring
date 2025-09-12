@@ -42,4 +42,10 @@ public class TodoController {
         service.delete(id);
         return ResponseEntity.noContent().build(); // 204
     }
+
+    @GetMapping("/title/{title}")
+    public ResponseEntity<Todo> getByTitle(@PathVariable String title) {
+        return ResponseEntity.ok(service.getByTitle(title));
+    }
+
 }
