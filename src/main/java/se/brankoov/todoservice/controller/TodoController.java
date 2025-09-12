@@ -1,6 +1,8 @@
 package se.brankoov.todoservice.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import se.brankoov.todoservice.service.TodoService;
 import se.brankoov.todoservice.entity.Todo;
@@ -8,44 +10,44 @@ import java.util.List;
 import jakarta.validation.Valid;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
+
 
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
 
     private final TodoService service;
-
-    public TodoController(TodoService service) {
-        this.service = service;
-    }
+    public TodoController(TodoService service) { this.service = service; }
 
     @GetMapping
-    public ResponseEntity<List<Todo>> getAllTodos() {
-        return ResponseEntity.ok(service.getAll());
+    public ResponseEntity<List<Todo>> getAllTodos(@AuthenticationPrincipal UserDetails me) {
+        return ResponseEntity.ok(service.getAllByOwner(me.getUsername()));
     }
 
     @PostMapping
-    public ResponseEntity<Todo> createTodo(@Valid @RequestBody Todo todo, UriComponentsBuilder uri) {
-        var saved = service.create(todo);
-        var location = uri.path("/api/v1/todos/{id}").buildAndExpand(saved.getId()).toUri();
-        return ResponseEntity.created(location).body(saved); // 201 Created
+    public ResponseEntity<Todo> createTodo(@AuthenticationPrincipal UserDetails me,
+                                           @Valid @RequestBody Todo todo,
+                                           UriComponentsBuilder uri) {
+        var saved = service.createForOwner(todo, me.getUsername());
+        var location = uri.path("/todos/{id}").buildAndExpand(saved.getId()).toUri();
+        return ResponseEntity.created(location).body(saved);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Todo> updateTodo(@PathVariable String id, @Valid @RequestBody Todo todo) {
-        return ResponseEntity.ok(service.update(id, todo));
+    public ResponseEntity<Todo> updateTodo(@AuthenticationPrincipal UserDetails me,
+                                           @PathVariable String id,
+                                           @Valid @RequestBody Todo todo) {
+        return ResponseEntity.ok(service.updateForOwner(id, todo, me.getUsername()));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteTodo(@PathVariable String id) {
-        service.delete(id);
-        return ResponseEntity.noContent().build(); // 204
+    public ResponseEntity<Void> deleteTodo(@AuthenticationPrincipal UserDetails me,
+                                           @PathVariable String id) {
+        service.deleteForOwner(id, me.getUsername());
+        return ResponseEntity.noContent().build();
     }
-
     @GetMapping("/title/{title}")
     public ResponseEntity<Todo> getByTitle(@PathVariable String title) {
         return ResponseEntity.ok(service.getByTitle(title));
     }
-
 }

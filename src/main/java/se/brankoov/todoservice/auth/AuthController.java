@@ -6,11 +6,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import se.brankoov.todoservice.repository.UserRepository;
-import se.brankoov.todoservice.user.AppUser;
+import se.brankoov.todoservice.entity.AppUser;
 
 
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/auth")
 public class AuthController {
 
     private final UserRepository repo;
@@ -35,7 +35,7 @@ public class AuthController {
         u.setPassword(encoder.encode(r.password())); // BCRYPT
         var saved = repo.save(u);
 
-        var location = uri.path("/api/v1/users/{id}").buildAndExpand(saved.getId()).toUri();
+        var location = uri.path("/users/{id}").buildAndExpand(saved.getId()).toUri();
         return ResponseEntity.created(location).build();
     }
 }

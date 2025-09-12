@@ -50,4 +50,37 @@ public class TodoService {
         return repository.findByTitle(title)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
     }
+
+    public List<Todo> getAllByOwner(String owner) {
+        return repository.findByOwner(owner);
+    }
+
+    public Todo createForOwner(Todo todo, String owner) {
+        todo.setOwner(owner);
+        todo.setUpdatedAt(Instant.now());
+        return repository.save(todo);
+    }
+
+    public Todo updateForOwner(String id, Todo newTodo, String owner) {
+        return repository.findById(id).map(t -> {
+            if (!owner.equals(t.getOwner())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your todo");
+            }
+            t.setTitle(newTodo.getTitle());
+            t.setDescription(newTodo.getDescription());
+            t.setCompleted(newTodo.isCompleted());
+            t.setUpdatedAt(Instant.now());
+            return repository.save(t);
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+    }
+
+    public void deleteForOwner(String id, String owner) {
+        var t = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+        if (!owner.equals(t.getOwner())) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your todo");
+        }
+        repository.deleteById(id);
+    }
 }
+
