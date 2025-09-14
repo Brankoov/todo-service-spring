@@ -25,6 +25,7 @@ public class SecurityConfig {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // Basic auth → stateless
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/actuator/health").permitAll()
+                        .requestMatchers("/todos/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic(Customizer.withDefaults());                  // Basic Auth
         return http.build();
