@@ -9,6 +9,7 @@ import se.brankoov.todoservice.entity.Todo;
 import java.util.List;
 import jakarta.validation.Valid;
 import org.springframework.web.util.UriComponentsBuilder;
+import se.brankoov.todoservice.statistics.TodoStats;
 
 
 
@@ -50,4 +51,15 @@ public class TodoController {
     public ResponseEntity<Todo> getByTitle(@PathVariable String title) {
         return ResponseEntity.ok(service.getByTitle(title));
     }
+
+    @GetMapping("/stats/by-title")
+    public ResponseEntity<List<TodoStats>> getStatsByTitle() {
+        var stats = service.getStatsByTitle();
+        if (stats.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(stats);
+    }
+
+
 }

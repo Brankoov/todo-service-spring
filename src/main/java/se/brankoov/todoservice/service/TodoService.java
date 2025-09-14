@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import se.brankoov.todoservice.entity.Todo;
 import se.brankoov.todoservice.repository.TodoRepository;
+import se.brankoov.todoservice.statistics.TodoStats;
 
 import java.time.Instant;
 import java.util.List;
@@ -20,6 +21,10 @@ public class TodoService {
 
     public List<Todo> getAll() {
         return repository.findAll();
+    }
+    
+    public List<TodoStats> getStatsByTitle() {
+        return repository.getCompletedStatsByTitle();
     }
 
     public Todo create(Todo todo) {
@@ -51,6 +56,7 @@ public class TodoService {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
     }
 
+
     public List<Todo> getAllByOwner(String owner) {
         return repository.findByOwner(owner);
     }
@@ -80,7 +86,8 @@ public class TodoService {
         if (!owner.equals(t.getOwner())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your todo");
         }
-        repository.deleteById(id);
+        repository.deleteById(id);    
+
     }
 }
 
