@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import se.brankoov.todoservice.entity.Todo;
 import se.brankoov.todoservice.repository.TodoRepository;
+import se.brankoov.todoservice.statistics.TodoStats;
 
 import java.time.Instant;
 import java.util.List;
@@ -49,5 +50,9 @@ public class TodoService {
     public Todo getByTitle(String title) {
         return repository.findByTitle(title)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
+    }
+
+    public List<TodoStats> getStatsByTitle() {
+        return repository.getCompletedStatsByTitle();
     }
 }
