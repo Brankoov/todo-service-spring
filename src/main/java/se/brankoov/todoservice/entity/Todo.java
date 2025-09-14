@@ -14,9 +14,10 @@ public class Todo {
 
     @NotBlank(message = "title must not be blank")
     private String title;
-
     private String description;
     private boolean completed = false;
+
+    private String owner;
 
     private Instant createdAt = Instant.now();
     private Instant updatedAt = Instant.now();
@@ -46,4 +47,7 @@ public class Todo {
 
     public Instant getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(Instant updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getOwner() { return owner; }
+    public void setOwner(String owner) { this.owner = owner; }
 }

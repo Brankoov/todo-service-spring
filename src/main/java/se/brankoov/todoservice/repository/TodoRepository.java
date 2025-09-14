@@ -5,11 +5,14 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import se.brankoov.todoservice.entity.Todo;
 import se.brankoov.todoservice.statistics.TodoStats;
 
+
 import java.util.List;
 import java.util.Optional;
 
 public interface TodoRepository extends MongoRepository<Todo, String> {
     Optional<Todo> findByTitle(String title);
+
+    List<Todo> findByOwner(String owner);
 
     @Aggregation(pipeline = {
             "{ $match: { completed: true } }",
@@ -18,4 +21,5 @@ public interface TodoRepository extends MongoRepository<Todo, String> {
             "{ $sort: { count: -1 } }"
     })
     List<TodoStats> getCompletedStatsByTitle();
+
 }
