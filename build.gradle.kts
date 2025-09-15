@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-	dependencies {
+
 		implementation("org.springframework.boot:spring-boot-starter-web")
 		implementation("org.springframework.boot:spring-boot-starter-data-mongodb") // <— byter till icke-reaktiv
 		implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -47,7 +47,7 @@ dependencies {
 		testImplementation("org.springframework.security:spring-security-test")
 
 		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	}
+
 }
 
 tasks.withType<Test> {
