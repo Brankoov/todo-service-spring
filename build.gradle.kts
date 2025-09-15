@@ -25,7 +25,7 @@ repositories {
 }
 
 dependencies {
-	dependencies {
+
 		implementation("org.springframework.boot:spring-boot-starter-web")
 		implementation("org.springframework.boot:spring-boot-starter-data-mongodb") // <— byter till icke-reaktiv
 		implementation("org.springframework.boot:spring-boot-starter-validation")
@@ -43,11 +43,11 @@ dependencies {
 		// testImplementation("io.projectreactor:reactor-test")
 
 		// Låt bli Security tills vidare (annars skyddas allt med Basic Auth)
-		// implementation("org.springframework.boot:spring-boot-starter-security")
-		// testImplementation("org.springframework.security:spring-security-test")
+		implementation("org.springframework.boot:spring-boot-starter-security")
+		testImplementation("org.springframework.security:spring-security-test")
 
 		testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-	}
+
 }
 
 tasks.withType<Test> {
