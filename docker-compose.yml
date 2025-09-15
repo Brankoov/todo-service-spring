@@ -9,5 +9,22 @@ services:
       - mongo_data:/data/db
     environment:
       MONGO_INITDB_DATABASE: todo-service
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 512M
+
+  app:
+    build: .
+    container_name: todo-app
+    ports:
+      - "8080:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+
 volumes:
   mongo_data:
