@@ -1,6 +1,9 @@
 package se.brankoov.todoservice.auth;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -20,10 +23,19 @@ public class AuthController {
         this.repo = repo; this.encoder = encoder;
     }
 
-    public record RegisterReq(@NotBlank String username, @NotBlank String password) {}
+    public record RegisterReq(
+            @NotBlank
+            @Size(min=3, max=32, message="username must be 3–32 chars")
+            @Pattern(regexp="^[a-zA-Z0-9._-]+$", message="username allows letters, digits, dot, underscore, hyphen")
+            String username,
+
+            @NotBlank
+            @Size(min=8, max=72, message="password must be 8–72 chars")
+            String password
+    ) {}
 
     @PostMapping("/register")
-    public ResponseEntity<Void> register(@RequestBody RegisterReq r, UriComponentsBuilder uri) {
+    public ResponseEntity<Void> register(@Valid @RequestBody RegisterReq r, UriComponentsBuilder uri) {
         // enkel koll – unikt username (fångas även av unique index)
         repo.findByUsername(r.username()).ifPresent(u -> {
             throw new org.springframework.web.server.ResponseStatusException(
