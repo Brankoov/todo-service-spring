@@ -1,6 +1,7 @@
 package se.brankoov.todoservice.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -41,5 +42,13 @@ public class GlobalExceptionHandler {
   public ResponseEntity<ApiError> handleGeneric(Exception ex, HttpServletRequest req) {
     var body = new ApiError(Instant.now(), 500, "Internal Server Error", "Unexpected error", req.getRequestURI());
     return ResponseEntity.status(500).body(body);
+  }
+  @ExceptionHandler(ConstraintViolationException.class)
+  public ResponseEntity<ApiError> handleConstraintViolations(ConstraintViolationException ex, HttpServletRequest req) {
+    var msg = ex.getConstraintViolations().stream()
+            .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+            .collect(Collectors.joining("; "));
+    var body = new ApiError(Instant.now(), 400, "Bad Request", msg, req.getRequestURI());
+    return ResponseEntity.badRequest().body(body);
   }
 }

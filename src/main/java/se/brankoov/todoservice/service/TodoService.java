@@ -61,8 +61,14 @@ public class TodoService {
         return repository.findByOwner(owner);
     }
 
+    private static String trimOrNull(String s) {
+        return s == null ? null : s.trim();
+    }
+
     public Todo createForOwner(Todo todo, String owner) {
         todo.setOwner(owner);
+        todo.setTitle(trimOrNull(todo.getTitle()));
+        todo.setDescription(trimOrNull(todo.getDescription()));
         todo.setUpdatedAt(Instant.now());
         return repository.save(todo);
     }
@@ -72,8 +78,8 @@ public class TodoService {
             if (!owner.equals(t.getOwner())) {
                 throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your todo");
             }
-            t.setTitle(newTodo.getTitle());
-            t.setDescription(newTodo.getDescription());
+            t.setTitle(trimOrNull(newTodo.getTitle()));
+            t.setDescription(trimOrNull(newTodo.getDescription()));
             t.setCompleted(newTodo.isCompleted());
             t.setUpdatedAt(Instant.now());
             return repository.save(t);
