@@ -22,13 +22,12 @@ public class TodoService {
     public List<Todo> getAll() {
         return repository.findAll();
     }
-    
+
     public List<TodoStats> getStatsByTitle() {
         return repository.getCompletedStatsByTitle();
     }
 
     public Todo create(Todo todo) {
-        // createdAt/updatedAt sätts i entiteten, men sätt updatedAt här för säkerhets skull
         todo.setUpdatedAt(Instant.now());
         return repository.save(todo);
     }
@@ -51,11 +50,11 @@ public class TodoService {
         }
         repository.deleteById(id);
     }
+
     public Todo getByTitle(String title) {
         return repository.findByTitle(title)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
     }
-
 
     public List<Todo> getAllByOwner(String owner) {
         return repository.findByOwner(owner);
@@ -92,8 +91,17 @@ public class TodoService {
         if (!owner.equals(t.getOwner())) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your todo");
         }
-        repository.deleteById(id);    
+        repository.deleteById(id);
+    }
 
+    public Todo toggleCompletedForOwner(String id, String owner) {
+        return repository.findById(id).map(t -> {
+            if (!owner.equals(t.getOwner())) {
+                throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Not your todo");
+            }
+            t.setCompleted(!t.isCompleted());
+            t.setUpdatedAt(Instant.now());
+            return repository.save(t);
+        }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Todo not found"));
     }
 }
-

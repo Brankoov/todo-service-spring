@@ -47,6 +47,7 @@ public class TodoController {
         service.deleteForOwner(id, me.getUsername());
         return ResponseEntity.noContent().build();
     }
+
     @GetMapping("/title/{title}")
     public ResponseEntity<Todo> getByTitle(@PathVariable String title) {
         return ResponseEntity.ok(service.getByTitle(title));
@@ -61,5 +62,9 @@ public class TodoController {
         return ResponseEntity.ok(stats);
     }
 
-
+    @PatchMapping("/{id}/toggle")
+    public ResponseEntity<Todo> toggleCompleted(@AuthenticationPrincipal UserDetails me,
+                                                @PathVariable String id) {
+        return ResponseEntity.ok(service.toggleCompletedForOwner(id, me.getUsername()));
+    }
 }
